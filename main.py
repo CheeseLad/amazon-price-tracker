@@ -4,6 +4,20 @@ import requests
 from bs4 import BeautifulSoup
 from pony import orm
 from datetime import datetime
+from requests_html import HTMLSession
+
+multiple_session = HTMLSession()
+multiple_url = "https://www.amazon.co.uk/s?k=graphics+card&crid=3KRUXZ9PFBV9E&sprefix=graphics+card%2Caps%2C59&ref=nb_sb_noss_1"
+
+def multiple_getdata(multiple_url):
+  r = multiple_session.get(multiple_url)
+  soup = BeautifulSoup(r.text, "html.parser")
+  return soup
+
+def getnextpage(soup):
+  page = soup.find("ul", {"class" : "a-pagination"})
+  #if not page.find("li", {"class" : "a-disabled a-last"}):
+   # url = ""
 
 db = orm.Database()
 db.bind(provider = "sqlite", filename = "amazon_products.db", create_db = True)
